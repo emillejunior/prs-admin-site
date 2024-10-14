@@ -1,0 +1,62 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String       @id @default(cuid())
+  name        String?
+  email       String       @unique
+  password    String
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  submissions Submission[]
+}
+
+model Contact {
+  id         Int      @id @default(autoincrement())
+  name       String
+  email      String
+  phone      String?
+  message    String?
+  profession String?
+  createdAt  DateTime @default(now())
+}
+
+model Visit {
+  id        String   @id @default(cuid())
+  ipAddress String
+  userAgent String
+  referer   String?
+  path      String
+  timestamp DateTime @default(now())
+}
+
+model SuspiciousIP {
+  id        String   @id @default(cuid())
+  ipAddress String   @unique
+  count     Int
+  lastSeen  DateTime @default(now())
+}
+
+model Submission {
+  id           Int      @id @default(autoincrement())
+  name         String
+  email        String
+  phone        String?
+  message      String
+  subject      String?
+  status       String   @default("NEW") // NEW, IN_PROGRESS, RESOLVED
+  profession   String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  assignedTo   User?    @relation(fields: [assignedToId], references: [id])
+  assignedToId String?
+}
