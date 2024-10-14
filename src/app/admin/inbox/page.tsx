@@ -142,7 +142,7 @@ export default async function NewInboxPage({
                       ? "default"
                       : submission.status === "IN_PROGRESS"
                         ? "secondary"
-                        : "success"
+                        : "outline"
                   }
                 >
                   {submission.status === "NEW" && (

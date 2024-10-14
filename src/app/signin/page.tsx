@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { getErrorMessage } from "@/lib/utils";
 
 export default function SignIn() {
   const router = useRouter();
@@ -32,9 +33,8 @@ export default function SignIn() {
       } else {
         setError("An unexpected error occurred");
       }
-    } catch (error: any) {
-      console.error("Sign in error:", error);
-      setError(error?.message || "An error occurred during sign in");
+    } catch (error: unknown) {
+      setError(getErrorMessage(error));
     }
   };
 
